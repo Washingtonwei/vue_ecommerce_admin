@@ -21,6 +21,7 @@
           :collapse="isCollapsed"
           :collapse-transition="false"
           router
+          :default-active="activePath"
         >
           <!-- Level 1 Menu -->
           <el-submenu
@@ -38,6 +39,7 @@
               :index="'/' + subItem.path"
               :key="subItem.id"
               v-for="subItem in item.children"
+              @click="saveNavState('/' + subItem.path)"
             >
               <template slot="title">
                 <i class="el-icon-menu"></i>
@@ -49,6 +51,8 @@
       </el-aside>
       <!-- container for main sections. -->
       <el-main>
+        <!-- All the subcomponents of Home.vue will be shown here -->
+        <!-- e.g. Users.vue, Goods.vue, Categories.vue etc -->
         <router-view></router-view>
       </el-main>
     </el-container>
@@ -68,7 +72,9 @@ export default {
         102: 'iconfont icon-danju',
         145: 'iconfont icon-baobiao'
       },
-      isCollapsed: false
+      isCollapsed: false,
+      // store which level 2 menu is being clicked
+      activePath: ''
     }
   },
   methods: {
@@ -84,10 +90,16 @@ export default {
     toggleCollapse() {
       // hide menu or display menu
       this.isCollapsed = !this.isCollapsed
+    },
+    saveNavState(activePath) {
+      window.sessionStorage.setItem('activePath', activePath)
+      this.activePath = activePath
     }
   },
   created() {
     this.getMenuList()
+    // highlight which level 2 menu is being clicked
+    this.activePath = window.sessionStorage.getItem('activePath')
   }
 }
 </script>
