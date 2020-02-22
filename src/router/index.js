@@ -1,9 +1,14 @@
+/**
+ * This file defines all the routing information for this website
+ * We need to important all Vue components and configure a URL for each one
+ */
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 // import .vue componenets that need to be routed
 import Login from '../components/Login.vue'
 import Home from '../components/Home.vue'
 import Welcome from '../components/Welcome.vue'
+import Users from '../components/user/Users.vue'
 
 Vue.use(VueRouter)
 
@@ -14,7 +19,10 @@ const routes = [
     path: '/home',
     redirect: '/welcome',
     component: Home,
-    children: [{ path: '/welcome', component: Welcome }]
+    children: [
+      { path: '/welcome', component: Welcome },
+      { path: '/users', component: Users }
+    ]
   }
 ]
 
