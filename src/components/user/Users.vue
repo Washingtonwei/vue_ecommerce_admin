@@ -3,8 +3,8 @@
     <!-- Breadcrumb -->
     <el-breadcrumb separator="/">
       <el-breadcrumb-item :to="{ path: '/home' }">Home</el-breadcrumb-item>
-      <el-breadcrumb-item>promotion list</el-breadcrumb-item>
-      <el-breadcrumb-item>promotion list</el-breadcrumb-item>
+      <el-breadcrumb-item>User Management</el-breadcrumb-item>
+      <el-breadcrumb-item>User List</el-breadcrumb-item>
     </el-breadcrumb>
     <!-- search and add area -->
     <el-card class="box-card">
@@ -76,6 +76,7 @@
                 type="warning"
                 icon="el-icon-setting"
                 size="mini"
+                @click="showAssignRoleDialog(scope.row)"
               ></el-button>
             </el-tooltip>
           </template>
@@ -152,6 +153,31 @@
         <el-button type="primary" @click="updateUser(editForm.id)"
           >Update</el-button
         >
+      </span>
+    </el-dialog>
+    <!-- Assign roles to a user dialog -->
+    <el-dialog
+      title="Assign Role to User"
+      :visible.sync="assignRoleDialogVisible"
+      width="50%"
+      @close="assignRoleDialogClosed"
+    >
+      <div>
+        <p>Current user: {{ userInfo.username }}</p>
+        <p>Current roles: {{ userInfo.role_name }}</p>
+        <el-select v-model="selectedRoleId" placeholder="Select">
+          <el-option
+            v-for="item in roleList"
+            :key="item.id"
+            :label="item.roleName"
+            :value="item.id"
+          >
+          </el-option>
+        </el-select>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="assignRoleDialogVisible = false">Cancel</el-button>
+        <el-button type="primary" @click="saveSelectedRole()">Update</el-button>
       </span>
     </el-dialog>
   </div>
@@ -236,7 +262,14 @@ export default {
       },
       // control edit dialog
       editDialogVisible: false,
-      editForm: {}
+      editForm: {},
+      // control assign role dialog
+      assignRoleDialogVisible: false,
+      // user who will be assigned roles
+      userInfo: {},
+      roleList: [],
+      // selected role of this current user
+      selectedRoleId: ''
     }
   },
   created() {
@@ -307,7 +340,9 @@ export default {
           email: this.editForm.email,
           mobile: this.editForm.mobile
         })
-        if (res.meta.status !== 200) this.$message.error('Update a User Error')
+        if (res.meta.status !== 200) {
+          return this.$message.error('Update a User Error')
+        }
         this.$message.success('Update a User Success')
         this.editDialogVisible = false
         // get the latest data
@@ -344,6 +379,40 @@ export default {
             message: 'Delete canceled'
           })
         })
+    },
+    async showAssignRoleDialog(userInfo) {
+      this.userInfo = userInfo
+      // obtain all roles from backend
+      const { data: res } = await this.$http.get('roles')
+      if (res.meta.status !== 200) {
+        return this.$message.error('Obtain Role List Failure')
+      }
+      this.roleList = res.data
+
+      this.assignRoleDialogVisible = true
+    },
+    async saveSelectedRole() {
+      if (!this.selectedRoleId) {
+        return this.$message.error('Please select a role')
+      }
+      const { data: res } = await this.$http.put(
+        `users/${this.userInfo.id}/role`,
+        {
+          rid: this.selectedRoleId
+        }
+      )
+      if (res.meta.status !== 200) {
+        console.log(res.meta.msg)
+        return this.$message.error('Update role failure')
+      }
+      this.$message.success('Update role success')
+      this.getUserList()
+      this.assignRoleDialogVisible = false
+    },
+    // reset assignRoleDialog when it is closed
+    assignRoleDialogClosed() {
+      this.selectedRoleId = ''
+      this.userInfo = ''
     }
   }
 }
