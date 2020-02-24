@@ -6,8 +6,9 @@
       <el-breadcrumb-item>User Management</el-breadcrumb-item>
       <el-breadcrumb-item>User List</el-breadcrumb-item>
     </el-breadcrumb>
-    <!-- search and add area -->
+    <!-- main area: search box, add user button and user table -->
     <el-card class="box-card">
+      <!-- search box and add a user button area -->
       <el-row :gutter="20">
         <el-col :span="8">
           <el-input
@@ -29,7 +30,7 @@
           >
         </el-col>
       </el-row>
-      <!-- user list area -->
+      <!-- user table area -->
       <!-- We need to bind userList to data attribute of el-table -->
       <el-table :data="userList" stripe style="width: 100%" border>
         <el-table-column type="index" label="#"> </el-table-column>
@@ -94,7 +95,7 @@
       >
       </el-pagination>
     </el-card>
-    <!-- add user dialog -->
+    <!-- add a user dialog -->
     <el-dialog
       title="Add a User"
       :visible.sync="addDialogVisible"
@@ -110,7 +111,7 @@
         <el-form-item label="Username" prop="username">
           <el-input v-model="addForm.username"></el-input>
         </el-form-item>
-        <el-form-item type="password" label="Password" prop="password">
+        <el-form-item label="Password" prop="password">
           <el-input v-model="addForm.password"></el-input>
         </el-form-item>
         <el-form-item label="Mobile" prop="mobile">
@@ -125,7 +126,7 @@
         <el-button type="primary" @click="addUser">Add</el-button>
       </span>
     </el-dialog>
-    <!-- edit user dialog -->
+    <!-- edit a user dialog -->
     <el-dialog
       title="Edit a User's Info"
       :visible.sync="editDialogVisible"
@@ -206,16 +207,17 @@ export default {
       cb(new Error('Not valid phone number'))
     }
     return {
-      // get user list's param
+      // params of method getUserList()
       queryInfo: {
-        query: '',
+        query: '', // search criteria, username
         pagenum: 1,
         pagesize: 2
       },
-      userList: [],
-      total: 0,
+      userList: [], // a list of users that match queryInfo
+      total: 0, // total number of users that match queryInfo
       // Add a user dialog visibility
       addDialogVisible: false,
+      // data in the add a user form
       addForm: {
         username: '',
         password: '',
@@ -260,15 +262,17 @@ export default {
           { validator: checkEmail, trigger: 'blur' }
         ]
       },
-      // control edit dialog
+      // control edit a user dialog visibility
       editDialogVisible: false,
+      // data in the edit a user form
       editForm: {},
-      // control assign role dialog
+      // control assign role dialog visibility
       assignRoleDialogVisible: false,
-      // user who will be assigned roles
+      // The user who will be assigned a new role in assign a user dialog
       userInfo: {},
+      // all the roles available to select
       roleList: [],
-      // selected role of this current user
+      // selected role Id of this user
       selectedRoleId: ''
     }
   },

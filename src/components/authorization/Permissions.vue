@@ -8,8 +8,8 @@
     </el-breadcrumb>
     <!-- Card view -->
     <el-card class="box-card">
-      <!-- user list area -->
-      <!-- We need to bind userList to data attribute of el-table -->
+      <!-- permission list area -->
+      <!-- We need to bind permissionList to data attribute of el-table -->
       <el-table :data="permissionList" stripe style="width: 100%" border>
         <el-table-column type="index" label="#"> </el-table-column>
         <el-table-column prop="authName" label="Permission name" width="180">
@@ -48,6 +48,7 @@
 export default {
   data() {
     return {
+      // all the permissions
       permissionList: []
     }
   },

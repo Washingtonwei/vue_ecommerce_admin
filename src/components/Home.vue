@@ -1,7 +1,8 @@
 <template>
+  <!-- Home.vue is the main page for the entire application, there are three parts: header, aside and main -->
   <!-- wrapper container. -->
   <el-container class="home-container">
-    <!-- container for headers. -->
+    <!-- container for header -->
     <el-header>
       <div>
         <img src="../assets/admin.png" alt="" />
@@ -41,10 +42,8 @@
               v-for="subItem in item.children"
               @click="saveNavState('/' + subItem.path)"
             >
-              <template slot="title">
-                <i class="el-icon-menu"></i>
-                <span>{{ subItem.authName }}</span>
-              </template>
+              <i class="el-icon-menu"></i>
+              <span>{{ subItem.authName }}</span>
             </el-menu-item>
           </el-submenu>
         </el-menu>
@@ -52,7 +51,7 @@
       <!-- container for main sections. -->
       <el-main>
         <!-- All the subcomponents of Home.vue will be shown here -->
-        <!-- e.g. Users.vue, Goods.vue, Categories.vue etc -->
+        <!-- e.g. Users.vue, Goods.vue, Permissions.vue, Categories.vue etc -->
         <router-view></router-view>
       </el-main>
     </el-container>
@@ -78,6 +77,7 @@ export default {
     }
   },
   methods: {
+    // simply delete the token in sessionStorage
     logout() {
       window.sessionStorage.clear()
       this.$router.push('/login')
@@ -87,6 +87,7 @@ export default {
       if (res.meta.status !== 200) return this.$message.error(res.meta.msg)
       this.menuList = res.data
     },
+    // click the ||| button on top of aside menu to collapse or expand
     toggleCollapse() {
       // hide menu or display menu
       this.isCollapsed = !this.isCollapsed
@@ -96,6 +97,7 @@ export default {
       this.activePath = activePath
     }
   },
+  // when the current vue component instance is being created, request all the meus to populdate nav in aside
   created() {
     this.getMenuList()
     // highlight which level 2 menu is being clicked

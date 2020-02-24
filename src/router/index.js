@@ -1,5 +1,6 @@
 /**
  * This file defines all the routing information for this website
+ * There are two <router-view>'s one in App.vue, one in Home.vue
  * We need to important all Vue components and configure a URL for each one
  */
 import Vue from 'vue'

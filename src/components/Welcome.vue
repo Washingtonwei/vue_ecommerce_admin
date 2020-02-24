@@ -1,5 +1,5 @@
 <template>
     <div>
-        <h3>Welcome!</h3>
+        <h3>Welcome to e-Commerce Admin System</h3>
     </div>
 </template>

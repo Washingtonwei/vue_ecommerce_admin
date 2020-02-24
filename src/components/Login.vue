@@ -12,14 +12,14 @@
         label-width="0"
         class="login_form"
       >
-        <!-- username -->
+        <!-- username input box-->
         <el-form-item prop="username">
           <el-input
             prefix-icon="iconfont icon-user"
             v-model="loginForm.username"
           ></el-input>
         </el-form-item>
-        <!-- password -->
+        <!-- password input box-->
         <el-form-item prop="password">
           <el-input
             type="password"
@@ -79,15 +79,21 @@ export default {
       this.$refs.loginFormRef.resetFields()
     },
     login() {
+      // when user clicks login button, we will first validate each field based on rules
+      // the form will be submitted only if validate is OK
       this.$refs.loginFormRef.validate(async valid => {
-        // if valid is true, it means fields are OK
+        // if valid is true, it means username and password fields are OK format
         if (!valid) return
+        // post request sending username and password
+        // we are interested in data field in the returned object, we rename "data" to res
         const { data: res } = await this.$http.post('login', this.loginForm)
+        // if status is not 200, this means login error
         if (res.meta.status !== 200) return this.$message.error('Login Failure')
+        // otherwise, show a success message box
         this.$message.success('Login Success')
-        // save token returned from server in sessionStorage for future reference
+        // save the token returned from server in sessionStorage for future reference
         window.sessionStorage.setItem('token', res.data.token)
-        // redirect to /home
+        // redirect to /home vue component
         this.$router.push('/home')
       })
     }

@@ -6,27 +6,29 @@
       <el-breadcrumb-item>Authorization</el-breadcrumb-item>
       <el-breadcrumb-item>Roles List</el-breadcrumb-item>
     </el-breadcrumb>
-    <!-- Card view -->
+    <!-- Card view: Add a view button and role table-->
     <el-card class="box-card">
       <!-- add a role area -->
       <el-row :gutter="20">
         <el-col :span="4">
           <el-button type="primary" @click="addDialogVisible = true"
-            >Add Role</el-button
+            >Add a Role</el-button
           >
         </el-col>
       </el-row>
       <!-- role list area -->
       <el-table :data="roleList" stripe style="width: 100%" border>
-        <!-- Expand column -->
+        <!-- Expand column, clicking this will show all the permissions this role currently has -->
         <el-table-column type="expand">
+          <!-- scoped slot is used here -->
           <template slot-scope="scope">
+            <!-- iterate all the chilren of one role -->
             <el-row
               :class="['bdbottom', i1 === 0 ? 'bdtop' : '', 'vcenter']"
               v-for="(item1, i1) in scope.row.children"
               :key="item1.id"
             >
-              <!-- Level 1 permission -->
+              <!-- Level 1 permission: item1 -->
               <el-col :span="8">
                 <el-tag
                   closable
@@ -38,7 +40,8 @@
               </el-col>
               <!-- Level 2 and 3 permissions -->
               <el-col :span="16">
-                <!-- Levet 2 permissions -->
+                <!-- Levet 2 permissions: item2 -->
+                <!-- iterate all the children of item1 -->
                 <el-row
                   :class="[i2 === 0 ? '' : 'bdtop', 'vcenter']"
                   v-for="(item2, i2) in item1.children"
@@ -54,7 +57,8 @@
                     </el-tag>
                     <i class="el-icon-caret-right"></i>
                   </el-col>
-                  <!-- Levet 3 permissions -->
+                  <!-- Level 3 permissions: item3 -->
+                  <!-- iterate all the children of item2 -->
                   <el-col :span="18">
                     <el-tag
                       type="warning"
@@ -106,7 +110,7 @@
         </el-table-column>
       </el-table>
     </el-card>
-    <!-- add role dialog -->
+    <!-- add a role dialog -->
     <el-dialog
       title="Add a Role"
       :visible.sync="addDialogVisible"
@@ -131,9 +135,9 @@
         <el-button type="primary" @click="addRole">Add</el-button>
       </span>
     </el-dialog>
-    <!-- edit role dialog -->
+    <!-- edit a role dialog -->
     <el-dialog
-      title="Edit a User's Info"
+      title="Edit a Role's Info"
       :visible.sync="editDialogVisible"
       width="50%"
       @close="editDialogClosed"
@@ -210,19 +214,24 @@ export default {
           }
         ]
       },
+      // control add a role dialog visibility
       addDialogVisible: false,
+      // control edit a role dialog visibility
       editDialogVisible: false,
+      // data in the edit a role form
       editForm: {},
+      // control set permissions to a role dialog visibility
       setPermissionsDialogVisible: false,
+      // stores all the permissions
       permissionList: [],
-      // used to tell tree component which is children which is label in permissionList
+      // used to tell the tree component which property represents "children" and which property represents "label" in the permissionList
       defaultProps: {
         children: 'children',
         label: 'authName'
       },
-      // ids of permissions of a role
+      // Ids of the current permissions (only level 3 permissions) of a role (before we give new permissions to this role)
       defaultCheckedKeys: [],
-      // the Id of the role that will be assigned new permissions
+      // the Id of the role that will be assigned new permissions in the set permissions to a role dialog
       roleId: ''
     }
   },
@@ -230,7 +239,7 @@ export default {
     this.getRoleList()
   },
   methods: {
-    // get permision list from backend
+    // get role list from backend
     async getRoleList() {
       const { data: res } = await this.$http.get('roles')
       if (res.meta.status !== 200) {
@@ -238,7 +247,7 @@ export default {
       }
       this.roleList = res.data
     },
-    // handles dialog closed event
+    // handles add a role dialog closed event
     addDialogClosed() {
       this.$refs.addFormRef.resetFields()
     },
@@ -277,7 +286,7 @@ export default {
         this.getRoleList()
       })
     },
-    // rest edit form when edit dialog is closed
+    // reset edit form when edit a role dialog is closed
     editDialogClosed() {
       this.$refs.editFormRef.resetFields()
     },
@@ -288,6 +297,7 @@ export default {
       this.editForm = res.data
       this.editDialogVisible = true
     },
+    // delete a role
     async deleteById(id) {
       // ask if you really want to delete this role
       this.$confirm(
@@ -315,10 +325,11 @@ export default {
           })
         })
     },
+    // remove a permission from a role
     async removePermissionById(roleInfo, rightId) {
       // ask if you really want to delete this role
       this.$confirm(
-        'This will permanently delete this permision. Continue?',
+        'This will permanently delete this permission. Continue?',
         'Warning',
         {
           confirmButtonText: 'OK',
@@ -358,7 +369,7 @@ export default {
       this.roleId = roleInfo.id
       this.setPermissionsDialogVisible = true
     },
-    // a recursive method that add level 3 permissions to arr
+    // a recursive method that adds level 3 permissions of a role to arr
     getLeafKeys(node, arr) {
       // if we reach to leaf
       if (!node.children) {

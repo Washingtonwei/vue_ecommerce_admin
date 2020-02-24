@@ -1,6 +1,6 @@
 /**
  * main.js is the entrance of the entire project
- * We import some external JS objects into the project, import CSS into the project
+ * In this file, we import some external JS objects into the project, import CSS into the project
  * Make some inital configurations
  */
 import Vue from 'vue'
@@ -11,17 +11,19 @@ import './plugins/element.js'
 import './assets/css/global.css'
 // import font
 import './assets/fonts/iconfont.css'
-// import axios and mount it to the property of Vue's prototype
+// import axios and do some basic configurations
 import axios from 'axios'
 axios.defaults.baseURL = 'http://localhost:8888/api/private/v1/'
-// add token to every http request
+// set the interceptors of axios: add token to every http request before this request goes out
 axios.interceptors.request.use(config => {
   config.headers.Authorization = window.sessionStorage.getItem('token')
   return config
 })
-Vue.prototype.$http = axios // every Vue component can use this.$http to make AJAX
+// mount axios to the property of Vue's prototype
+Vue.prototype.$http = axios // every Vue component can use this.$http to make AJAX request
 
 Vue.config.productionTip = false
+
 // create a Vue instance for this project
 new Vue({
   router,
