@@ -7,6 +7,8 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import './plugins/element.js'
+// import tree table
+import TreeTable from 'vue-table-with-tree-grid'
 // import global.css
 import './assets/css/global.css'
 // import font
@@ -21,6 +23,9 @@ axios.interceptors.request.use(config => {
 })
 // mount axios to the property of Vue's prototype
 Vue.prototype.$http = axios // every Vue component can use this.$http to make AJAX request
+
+// register it as a component
+Vue.component('tree-table', TreeTable)
 
 Vue.config.productionTip = false
 
