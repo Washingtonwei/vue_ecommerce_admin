@@ -6,9 +6,9 @@
       <el-breadcrumb-item>Goods Management</el-breadcrumb-item>
       <el-breadcrumb-item>Category List</el-breadcrumb-item>
     </el-breadcrumb>
-    <!-- main area: search box, add user button and user table -->
+    <!-- main area: add a category button and category tree table -->
     <el-card class="box-card">
-      <!-- search box and add a user button area -->
+      <!-- add a category button button area -->
       <el-row>
         <el-col :span="4">
           <el-button type="primary" @click="showAddDialog"
@@ -16,8 +16,7 @@
           >
         </el-col>
       </el-row>
-
-      <!-- category table area -->
+      <!-- category tree table area -->
       <tree-table
         class="treeTable"
         :data="categoryList"
@@ -30,6 +29,7 @@
         :show-row-hover="false"
       >
         <!-- template for the second column of this table, shows whether a category is still active or not -->
+        <!-- Please note, both slot and slot-scope attributes in tempalte tag are deprecated already -->
         <template slot="isActive" slot-scope="scope">
           <i class="el-icon-success" v-if="scope.row.cat_deleted === false"></i>
           <i class="el-icon-error" v-else></i>
@@ -135,14 +135,18 @@
 export default {
   data() {
     return {
+      // stores all the categories for the tree table
       categoryList: [],
-      // search criteria
+      // search criteria, used for pagination
       queryInfo: {
-        type: 3, // by default, we want all three level categories
+        type: 3, // by default, we want all three level categories returned
         pagenum: 1,
         pagesize: 5
       },
       total: 0, // total number of level 1 categories
+      // tells tree table how to populate the table based on data in categoryList
+      // in this case, there will be four columns in the tree table, Category, Active, Level and Operations
+      // Category's value can be obtained from cat_name, the other three are templates
       columns: [
         { label: 'Category', prop: 'cat_name' },
         // scoped slot
@@ -150,7 +154,9 @@ export default {
         { label: 'Level', type: 'template', template: 'level' },
         { label: 'Operations', type: 'template', template: 'operations' }
       ],
+      // controls add form dialog's visibility
       addDialogVisible: false,
+      // stores contents in the add form
       addForm: {
         cat_pid: 0, // by default, pid is zero
         cat_name: '',
@@ -160,20 +166,24 @@ export default {
         cat_name: [
           {
             required: true,
-            message: 'Please input category name',
+            message: 'Please input a category name',
             trigger: 'blur'
           }
         ]
       },
-      // stores all level 1 and level 2 categories, used in add cat dialog
+      // stores all level 1 and level 2 categories, used in add category form dialog
       parentCategories: [],
-      // tells cascader what information to retrive from parentCategories
+      // tells cascader what information to retrieve from parentCategories
       cascaderProps: {
-        expandTrigger: 'hover',
+        expandTrigger: 'hover', // expand to child on hover event
         value: 'cat_id', // cat_id will be selected once user clicks an item
         label: 'cat_name', // this is what a user will see in this cascader
-        children: 'children'
+        children: 'children' // get to next level of categories
       },
+      // this array is used to store user's selection, its length can be 0 or 1 or 2
+      // length 0 means user wants to add a new level 1 category
+      // length 1 means user wants to add a new level 2 category
+      // length 2 means user wants to add a new level 3 category
       selectedParentCategories: [],
       // control edit a category dialog visibility
       editDialogVisible: false,
@@ -210,22 +220,21 @@ export default {
     // we are preparing all the level 1 and 2 categories
     async getParentCategories() {
       const { data: res } = await this.$http.get('/categories', {
-        params: { type: 2 }
+        params: { type: 2 } // remember, type 2 means get all level 1 and level 2 categories
       })
       if (res.meta.status !== 200) {
         this.$message.error('Obtain Parent Category Error')
       }
-      // this.$message.success('Obtain Parent Category Success')
       this.parentCategories = res.data
     },
     showAddDialog() {
       // prepare the dropdown parent categories for the add form
-      this.getParentCategories()
+      this.getParentCategories() // all the level 1 and level 2 categories
       this.addDialogVisible = true
     },
-    // when a user selects a parent category for the new category to be added
+    // when a user selects a parent category for the new category to be added in add a category form dialog
     handleParentCategoryChange() {
-      // if there is parent selected, we need to set pid and level of this category
+      // if there is parent category being selected, we need to set pid and level of this new category
       // if this array is not empty
       if (this.selectedParentCategories.length > 0) {
         // find the last id in selectedParentCategories array
@@ -235,7 +244,7 @@ export default {
         // the level of this category is equal to the length of selectedParentCategories
         this.addForm.cat_level = this.selectedParentCategories.length
       } else {
-        // if we didn't select any parent category
+        // if we didn't select any parent category, we want to add a level 1 category
         this.addForm.cat_pid = 0
         this.addForm.cat_level = 0
       }
@@ -260,9 +269,10 @@ export default {
         this.getCategoryList()
       })
     },
-
     async showEditDialog(categoryInfo) {
-      const { data: res } = await this.$http.get('categories/' + categoryInfo.cat_id)
+      const { data: res } = await this.$http.get(
+        'categories/' + categoryInfo.cat_id
+      )
       if (res.meta.status !== 200) this.$message.error('Find a category Error')
       // populate the edit form
       this.editForm = res.data
@@ -284,7 +294,7 @@ export default {
         this.getCategoryList()
       })
     },
-    // rest edit form when edit dialog is closed
+    // reset edit form when edit dialog is closed
     editDialogClosed() {
       this.$refs.editFormRef.resetFields()
     },

@@ -22,7 +22,7 @@
         <el-table-column type="expand">
           <!-- scoped slot is used here -->
           <template slot-scope="scope">
-            <!-- iterate all the chilren of one role -->
+            <!-- iterate all the children of one role -->
             <el-row
               :class="['bdbottom', i1 === 0 ? 'bdtop' : '', 'vcenter']"
               v-for="(item1, i1) in scope.row.children"

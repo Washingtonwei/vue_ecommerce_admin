@@ -353,7 +353,7 @@ export default {
         this.getUserList()
       })
     },
-    // rest edit form when edit dialog is closed
+    // reset edit form when edit dialog is closed
     editDialogClosed() {
       this.$refs.editFormRef.resetFields()
     },
