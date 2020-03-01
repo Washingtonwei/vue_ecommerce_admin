@@ -45,7 +45,7 @@
             <!-- User can add more or remove them -->
             <el-table-column type="expand">
               <!-- scoped slot is used here -->
-              <template slot-scope="scope">
+              <template v-slot="scope">
                 <!-- iterate all the attr_vals of this attribute -->
                 <!-- since we have already preprocessed attr_vals, so now it is an array of strings -->
                 <el-tag
@@ -79,7 +79,7 @@
             <el-table-column type="index" label="#"> </el-table-column>
             <el-table-column label="Name" prop="attr_name"></el-table-column>
             <el-table-column label="Operations" width="180px">
-              <template slot-scope="scope">
+              <template v-slot="scope">
                 <el-button
                   type="primary"
                   icon="el-icon-edit"
@@ -110,7 +110,7 @@
           <el-table :data="staticAttributes" border stripe>
             <el-table-column type="expand">
               <!-- scoped slot is used here -->
-              <template slot-scope="scope">
+              <template v-slot="scope">
                 <!-- iterate all the attr_vals of this attribute -->
                 <!-- since we have already preprocessed attr_vals, so now it is an array of strings -->
                 <el-tag
@@ -144,7 +144,7 @@
             <el-table-column type="index" label="#"> </el-table-column>
             <el-table-column label="Name" prop="attr_name"></el-table-column>
             <el-table-column label="Operations" width="180px">
-              <template slot-scope="scope">
+              <template v-slot="scope">
                 <el-button
                   type="primary"
                   icon="el-icon-edit"

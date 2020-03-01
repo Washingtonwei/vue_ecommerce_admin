@@ -17,7 +17,7 @@
         <el-table-column prop="path" label="Path" width="180">
         </el-table-column>
         <el-table-column prop="level" label="Permission level">
-          <template slot-scope="scope">
+          <template v-slot="scope">
             <el-tag v-if="scope.row.level === '0'">
               Level 1
             </el-tag>
