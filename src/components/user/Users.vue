@@ -15,6 +15,7 @@
             placeholder="Search a user"
             v-model="queryInfo.query"
             clearable
+            @keyup.enter.native="getUserList()"
             @clear="getUserList()"
           >
             <el-button
@@ -41,7 +42,7 @@
         <el-table-column prop="mobile" label="Mobile"> </el-table-column>
         <el-table-column prop="role_name" label="Role"> </el-table-column>
         <el-table-column label="Status">
-          <template slot-scope="scope">
+          <template v-slot="scope">
             <!-- scope.row represents the record, this slot-scope syntax is deprecated in Vue 2.6 -->
             <el-switch
               v-model="scope.row.mg_state"
@@ -53,7 +54,7 @@
           </template>
         </el-table-column>
         <el-table-column label="Operations" width="180px">
-          <template slot-scope="scope">
+          <template v-slot="scope">
             <el-button
               type="primary"
               icon="el-icon-edit"
@@ -108,6 +109,7 @@
         :rules="addFormRules"
         label-width="120px"
       >
+        <!-- prop is for validation rule -->
         <el-form-item label="Username" prop="username">
           <el-input v-model="addForm.username"></el-input>
         </el-form-item>
@@ -321,7 +323,9 @@ export default {
         if (!valid) return
         // use axios to add a user
         const { data: res } = await this.$http.post('/users', this.addForm)
-        if (res.meta.status !== 200) this.$message.error('Add User Error')
+        if (res.meta.status !== 201) {
+          this.$message.error('Add User Error')
+        }
         this.$message.success('Add User Success')
         // hide add user dialog
         this.addDialogVisible = false

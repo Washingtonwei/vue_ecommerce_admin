@@ -261,7 +261,7 @@ export default {
         if (!valid) return
         // use axios to add a user
         const { data: res } = await this.$http.post('/categories', this.addForm)
-        if (res.meta.status !== 200) this.$message.error('Add Category Error')
+        if (res.meta.status !== 201) this.$message.error('Add Category Error')
         this.$message.success('Add Category Success')
         // hide add dialog
         this.addDialogVisible = false

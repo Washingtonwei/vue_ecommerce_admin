@@ -21,7 +21,7 @@
         <!-- Expand column, clicking this will show all the permissions this role currently has -->
         <el-table-column type="expand">
           <!-- scoped slot is used here -->
-          <template slot-scope="scope">
+          <template v-slot="scope">
             <!-- iterate all the children of one role -->
             <el-row
               :class="['bdbottom', i1 === 0 ? 'bdtop' : '', 'vcenter']"
@@ -79,7 +79,7 @@
         <el-table-column prop="roleName" label="Role name"> </el-table-column>
         <el-table-column prop="roleDesc" label="Description"> </el-table-column>
         <el-table-column label="Operations">
-          <template slot-scope="scope">
+          <template v-slot="scope">
             <el-button
               type="primary"
               icon="el-icon-edit"
@@ -256,7 +256,7 @@ export default {
         if (!valid) return
         // use axios to add a role
         const { data: res } = await this.$http.post('/roles', this.addForm)
-        if (res.meta.status !== 200) this.$message.error('Add Role Error')
+        if (res.meta.status !== 201) this.$message.error('Add Role Error')
         this.$message.success('Add Role Success')
         // hide add role dialog
         this.addDialogVisible = false
