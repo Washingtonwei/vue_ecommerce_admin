@@ -6,9 +6,7 @@
       <el-breadcrumb-item>Order Management</el-breadcrumb-item>
       <el-breadcrumb-item>Order List</el-breadcrumb-item>
     </el-breadcrumb>
-    <!-- main area: search box, add user button and user table -->
     <el-card class="box-card">
-      <!-- search box and add a user button area -->
       <el-row :gutter="20">
         <el-col :span="8">
           <el-input
@@ -130,7 +128,7 @@ import cityData from './citydata.js'
 export default {
   data() {
     return {
-      // params of method getUserList()
+      // params of method getOrderList()
       queryInfo: {
         query: '', // search criteria
         pagenum: 1,
@@ -173,7 +171,7 @@ export default {
         params: this.queryInfo
       })
       if (res.meta.status !== 200) {
-        return this.$message.error('Obtain Users List Failure')
+        return this.$message.error('Obtain Orders List Failure')
       }
       // update data object
       this.orderList = res.data.goods
@@ -189,7 +187,7 @@ export default {
       // since there is a new page num, request data on that page
       this.getOrderList()
     },
-    async showEditDialog(userInfo) {
+    async showEditDialog() {
       this.editDialogVisible = true
     },
     // reset edit form when edit dialog is closed
