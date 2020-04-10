@@ -14,6 +14,8 @@ module.exports = {
       }
     ],
     // when in production, everything in prodPlugins array will take effect
-    ...prodPlugins
+    ...prodPlugins,
+    // vue router lazy loading
+    '@babel/plugin-syntax-dynamic-import'
   ]
 }

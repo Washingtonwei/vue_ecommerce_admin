@@ -18,6 +18,11 @@ module.exports = {
         nprogress: 'NProgress',
         'vue-quill-editor': 'VueQuillEditor'
       })
+      // set isProd to true, this is for determining which environment we are in, dev or prod
+      config.plugin('html').tap(args => {
+        args[0].isProd = true
+        return args
+      })
     })
     // development entry
     config.when(process.env.NODE_ENV === 'development', config => {
@@ -25,6 +30,11 @@ module.exports = {
         .entry('app')
         .clear()
         .add('./src/main-dev.js')
+      // set isProd to false, this is for determining which environment we are in, dev or prod
+      config.plugin('html').tap(args => {
+        args[0].isProd = false
+        return args
+      })
     })
   }
 }
