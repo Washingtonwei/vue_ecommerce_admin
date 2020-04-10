@@ -9,22 +9,12 @@
     <!-- main area -->
     <el-card class="box-card">
       <!-- Warning message -->
-      <el-alert
-        title="Reminder: You can only set attributes for level 3 categories"
-        type="warning"
-        show-icon
-        :closable="false"
-      ></el-alert>
+      <el-alert title="Reminder: You can only set attributes for level 3 categories" type="warning" show-icon :closable="false"></el-alert>
       <!-- Select a category cascader -->
       <el-row class="cat_opt">
         <el-col>
           <span>Select a level 3 category: </span>
-          <el-cascader
-            v-model="selectedCategories"
-            :options="categoryList"
-            :props="cascaderProps"
-            @change="handleCategoryChange"
-          ></el-cascader>
+          <el-cascader v-model="selectedCategories" :options="categoryList" :props="cascaderProps" @change="handleCategoryChange"></el-cascader>
         </el-col>
       </el-row>
       <!-- Two Tabs, one for setting dynamic attribute, the other for setting static attribute -->
@@ -32,13 +22,7 @@
         <!-- tab-pane for dynamic attributes of this selected category -->
         <!-- in the backend, "many" means dynamic attribute  -->
         <el-tab-pane label="Dynamic Attributes" name="many">
-          <el-button
-            type="primary"
-            size="mini"
-            :disabled="isBtnDisabled"
-            @click="addDialogVisible = true"
-            >Add Dynamic Attribute</el-button
-          >
+          <el-button type="primary" size="mini" :disabled="isBtnDisabled" @click="addDialogVisible = true">Add Dynamic Attribute</el-button>
           <!-- Table to display dynamic attributes -->
           <el-table :data="dynamicAttributes" border stripe>
             <!-- Expand column, clicking this will show all the values this attribute currently has -->
@@ -48,12 +32,7 @@
               <template v-slot="scope">
                 <!-- iterate all the attr_vals of this attribute -->
                 <!-- since we have already preprocessed attr_vals, so now it is an array of strings -->
-                <el-tag
-                  v-for="(val, i) in scope.row.attr_vals"
-                  :key="i"
-                  closable
-                  @close="handleTagClose(scope.row, i)"
-                >
+                <el-tag v-for="(val, i) in scope.row.attr_vals" :key="i" closable @close="handleTagClose(scope.row, i)">
                   {{ val }}
                 </el-tag>
                 <!-- followed by an editable tag -->
@@ -67,31 +46,15 @@
                   @blur="handleInputConfirm(scope.row)"
                 >
                 </el-input>
-                <el-button
-                  v-else
-                  class="button-new-tag"
-                  size="small"
-                  @click="showInput(scope.row)"
-                  >+ New Value</el-button
-                >
+                <el-button v-else class="button-new-tag" size="small" @click="showInput(scope.row)">+ New Value</el-button>
               </template>
             </el-table-column>
             <el-table-column type="index" label="#"> </el-table-column>
             <el-table-column label="Name" prop="attr_name"></el-table-column>
             <el-table-column label="Operations" width="180px">
               <template v-slot="scope">
-                <el-button
-                  type="primary"
-                  icon="el-icon-edit"
-                  size="mini"
-                  @click="showEditDialog(scope.row)"
-                ></el-button>
-                <el-button
-                  type="danger"
-                  icon="el-icon-delete"
-                  size="mini"
-                  @click="deleteById(scope.row.attr_id)"
-                ></el-button>
+                <el-button type="primary" icon="el-icon-edit" size="mini" @click="showEditDialog(scope.row)"></el-button>
+                <el-button type="danger" icon="el-icon-delete" size="mini" @click="deleteById(scope.row.attr_id)"></el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -99,13 +62,7 @@
         <!-- tab-pane for static attributes of this selected category -->
         <!-- in the backend, "only" means static attribute -->
         <el-tab-pane label="Static Attributes" name="only"
-          ><el-button
-            type="primary"
-            size="mini"
-            :disabled="isBtnDisabled"
-            @click="addDialogVisible = true"
-            >Add Static Attribute</el-button
-          >
+          ><el-button type="primary" size="mini" :disabled="isBtnDisabled" @click="addDialogVisible = true">Add Static Attribute</el-button>
           <!-- Table to display static attribute -->
           <el-table :data="staticAttributes" border stripe>
             <el-table-column type="expand">
@@ -113,12 +70,7 @@
               <template v-slot="scope">
                 <!-- iterate all the attr_vals of this attribute -->
                 <!-- since we have already preprocessed attr_vals, so now it is an array of strings -->
-                <el-tag
-                  v-for="(val, i) in scope.row.attr_vals"
-                  :key="i"
-                  closable
-                  @close="handleTagClose(scope.row, i)"
-                >
+                <el-tag v-for="(val, i) in scope.row.attr_vals" :key="i" closable @close="handleTagClose(scope.row, i)">
                   {{ val }}
                 </el-tag>
                 <!-- followed by an editable tag -->
@@ -132,31 +84,15 @@
                   @blur="handleInputConfirm(scope.row)"
                 >
                 </el-input>
-                <el-button
-                  v-else
-                  class="button-new-tag"
-                  size="small"
-                  @click="showInput(scope.row)"
-                  >+ New Value</el-button
-                >
+                <el-button v-else class="button-new-tag" size="small" @click="showInput(scope.row)">+ New Value</el-button>
               </template>
             </el-table-column>
             <el-table-column type="index" label="#"> </el-table-column>
             <el-table-column label="Name" prop="attr_name"></el-table-column>
             <el-table-column label="Operations" width="180px">
               <template v-slot="scope">
-                <el-button
-                  type="primary"
-                  icon="el-icon-edit"
-                  size="mini"
-                  @click="showEditDialog(scope.row)"
-                ></el-button>
-                <el-button
-                  type="danger"
-                  icon="el-icon-delete"
-                  size="mini"
-                  @click="deleteById(scope.row.attr_id)"
-                ></el-button>
+                <el-button type="primary" icon="el-icon-edit" size="mini" @click="showEditDialog(scope.row)"></el-button>
+                <el-button type="danger" icon="el-icon-delete" size="mini" @click="deleteById(scope.row.attr_id)"></el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -164,18 +100,8 @@
       </el-tabs>
     </el-card>
     <!-- add a dynamic attribute or static attribute dialog, the name of the dialog depends on the computed property addTitlText -->
-    <el-dialog
-      :title="'Add a ' + addTitleText"
-      :visible.sync="addDialogVisible"
-      width="50%"
-      @close="addDialogClosed"
-    >
-      <el-form
-        ref="addFormRef"
-        :model="addForm"
-        :rules="addFormRules"
-        label-width="120px"
-      >
+    <el-dialog :title="'Add a ' + addTitleText" :visible.sync="addDialogVisible" width="50%" @close="addDialogClosed">
+      <el-form ref="addFormRef" :model="addForm" :rules="addFormRules" label-width="120px">
         <el-form-item :label="addTitleText" prop="attr_name">
           <el-input v-model="addForm.attr_name"></el-input>
         </el-form-item>
@@ -186,27 +112,15 @@
       </span>
     </el-dialog>
     <!-- edit an attribute dialog -->
-    <el-dialog
-      title="Edit an attribute"
-      :visible.sync="editDialogVisible"
-      width="50%"
-      @close="editDialogClosed"
-    >
-      <el-form
-        ref="editFormRef"
-        :model="editForm"
-        :rules="addFormRules"
-        label-width="120px"
-      >
+    <el-dialog title="Edit an attribute" :visible.sync="editDialogVisible" width="50%" @close="editDialogClosed">
+      <el-form ref="editFormRef" :model="editForm" :rules="addFormRules" label-width="120px">
         <el-form-item label="Attribute name">
           <el-input v-model="editForm.attr_name"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="editDialogVisible = false">Cancel</el-button>
-        <el-button type="primary" @click="updateAttribute(editForm.attr_id)"
-          >Update</el-button
-        >
+        <el-button type="primary" @click="updateAttribute(editForm.attr_id)">Update</el-button>
       </span>
     </el-dialog>
   </div>
@@ -281,12 +195,9 @@ export default {
       } else {
         // the user has selected a level 3 category
         // let's find all the attributes of this category
-        const { data: res } = await this.$http.get(
-          `categories/${this.catId}/attributes`,
-          {
-            params: { sel: this.activeName }
-          }
-        )
+        const { data: res } = await this.$http.get(`categories/${this.catId}/attributes`, {
+          params: { sel: this.activeName }
+        })
         if (res.meta.status !== 200) {
           this.$message.error('Obtain attributes of a category failure')
         }
@@ -316,13 +227,10 @@ export default {
       this.$refs.addFormRef.validate(async valid => {
         if (!valid) return
         // use axios to add an attribute
-        const { data: res } = await this.$http.post(
-          `categories/${this.catId}/attributes`,
-          {
-            attr_name: this.addForm.attr_name,
-            attr_sel: this.activeName
-          }
-        )
+        const { data: res } = await this.$http.post(`categories/${this.catId}/attributes`, {
+          attr_name: this.addForm.attr_name,
+          attr_sel: this.activeName
+        })
         // be careful, success is 201 in this case
         if (res.meta.status !== 201) this.$message.error('Add Attribute Error')
         console.log(res.meta.msg)
@@ -338,12 +246,9 @@ export default {
     },
     async showEditDialog(attributeInfo) {
       // prepare data for edit form, find attribute by cat_id and attr_id
-      const { data: res } = await this.$http.get(
-        `categories/${this.catId}/attributes/${attributeInfo.attr_id}`,
-        {
-          params: { attr_sel: this.activeName }
-        }
-      )
+      const { data: res } = await this.$http.get(`categories/${this.catId}/attributes/${attributeInfo.attr_id}`, {
+        params: { attr_sel: this.activeName }
+      })
       if (res.meta.status !== 200) {
         this.$message.error('Find an Attribute Error')
       }
@@ -356,13 +261,10 @@ export default {
       this.$refs.editFormRef.validate(async valid => {
         if (!valid) return
         // use axios to update this attribute
-        const { data: res } = await this.$http.put(
-          `categories/${this.catId}/attributes/${id}`,
-          {
-            attr_name: this.editForm.attr_name,
-            attr_sel: this.activeName
-          }
-        )
+        const { data: res } = await this.$http.put(`categories/${this.catId}/attributes/${id}`, {
+          attr_name: this.editForm.attr_name,
+          attr_sel: this.activeName
+        })
         if (res.meta.status !== 200) {
           return this.$message.error('Update a Attribute Error')
         }
@@ -375,19 +277,13 @@ export default {
     // id is the id of the attribute
     async deleteById(id) {
       // ask if you really want to delete this attribute
-      this.$confirm(
-        'This will permanently delete this attribute. Continue?',
-        'Warning',
-        {
-          confirmButtonText: 'OK',
-          cancelButtonText: 'Cancel',
-          type: 'warning'
-        }
-      )
+      this.$confirm('This will permanently delete this attribute. Continue?', 'Warning', {
+        confirmButtonText: 'OK',
+        cancelButtonText: 'Cancel',
+        type: 'warning'
+      })
         .then(async () => {
-          const { data: res } = await this.$http.delete(
-            `categories/${this.catId}/attributes/${id}`
-          )
+          const { data: res } = await this.$http.delete(`categories/${this.catId}/attributes/${id}`)
           if (res.meta.status !== 200) {
             this.$message.error('Delete an Attribute Error')
           }
@@ -443,14 +339,11 @@ export default {
     // before we send PUT request, we need to convert array to space separated strings
     async updateAttributeValue(attributeInfo) {
       // use axios to update this attribute
-      const { data: res } = await this.$http.put(
-        `categories/${this.catId}/attributes/${attributeInfo.attr_id}`,
-        {
-          attr_name: attributeInfo.attr_name,
-          attr_sel: this.activeName,
-          attr_vals: attributeInfo.attr_vals.join(' ')
-        }
-      )
+      const { data: res } = await this.$http.put(`categories/${this.catId}/attributes/${attributeInfo.attr_id}`, {
+        attr_name: attributeInfo.attr_name,
+        attr_sel: this.activeName,
+        attr_vals: attributeInfo.attr_vals.join(' ')
+      })
       if (res.meta.status !== 200) {
         // if fail, we need to make sure the page stays the same, so we delete the newly added attr val
         attributeInfo.attr_vals.pop()
@@ -476,9 +369,7 @@ export default {
     // this computed property is used in add attribute form dialog
     // we can use this to determine which title to show
     addTitleText() {
-      return this.activeName === 'many'
-        ? 'Dynamic attribute'
-        : 'Static attribute'
+      return this.activeName === 'many' ? 'Dynamic attribute' : 'Static attribute'
     }
   }
 }

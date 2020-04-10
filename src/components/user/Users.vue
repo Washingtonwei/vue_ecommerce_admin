@@ -11,75 +11,34 @@
       <!-- search box and add a user button area -->
       <el-row :gutter="20">
         <el-col :span="8">
-          <el-input
-            placeholder="Search a user"
-            v-model="queryInfo.query"
-            clearable
-            @keyup.enter.native="getUserList()"
-            @clear="getUserList()"
-          >
-            <el-button
-              slot="append"
-              icon="el-icon-search"
-              @click="getUserList()"
-            ></el-button>
+          <el-input placeholder="Search a user" v-model="queryInfo.query" clearable @keyup.enter.native="getUserList()" @clear="getUserList()">
+            <el-button slot="append" icon="el-icon-search" @click="getUserList()"></el-button>
           </el-input>
         </el-col>
         <el-col :span="4">
-          <el-button type="primary" @click="addDialogVisible = true"
-            >Add User</el-button
-          >
+          <el-button type="primary" @click="addDialogVisible = true">Add User</el-button>
         </el-col>
       </el-row>
       <!-- user table area -->
       <!-- We need to bind userList to data attribute of el-table -->
       <el-table :data="userList" stripe style="width: 100%" border>
         <el-table-column type="index" label="#"> </el-table-column>
-        <el-table-column prop="username" label="Username" width="180">
-        </el-table-column>
-        <el-table-column prop="email" label="Email" width="180">
-        </el-table-column>
+        <el-table-column prop="username" label="Username" width="180"> </el-table-column>
+        <el-table-column prop="email" label="Email" width="180"> </el-table-column>
         <el-table-column prop="mobile" label="Mobile"> </el-table-column>
         <el-table-column prop="role_name" label="Role"> </el-table-column>
         <el-table-column label="Status">
           <template v-slot="scope">
             <!-- scope.row represents the record, this slot-scope syntax is deprecated in Vue 2.6 -->
-            <el-switch
-              v-model="scope.row.mg_state"
-              active-color="#13ce66"
-              inactive-color="#ff4949"
-              @change="updateStatus(scope.row)"
-            >
-            </el-switch>
+            <el-switch v-model="scope.row.mg_state" active-color="#13ce66" inactive-color="#ff4949" @change="updateStatus(scope.row)"> </el-switch>
           </template>
         </el-table-column>
         <el-table-column label="Operations" width="180px">
           <template v-slot="scope">
-            <el-button
-              type="primary"
-              icon="el-icon-edit"
-              size="mini"
-              @click="showEditDialog(scope.row)"
-            ></el-button>
-            <el-button
-              type="danger"
-              icon="el-icon-delete"
-              size="mini"
-              @click="deleteById(scope.row.id)"
-            ></el-button>
-            <el-tooltip
-              class="item"
-              effect="dark"
-              content="Assign Role"
-              placement="top"
-              :enterable="false"
-            >
-              <el-button
-                type="warning"
-                icon="el-icon-setting"
-                size="mini"
-                @click="showAssignRoleDialog(scope.row)"
-              ></el-button>
+            <el-button type="primary" icon="el-icon-edit" size="mini" @click="showEditDialog(scope.row)"></el-button>
+            <el-button type="danger" icon="el-icon-delete" size="mini" @click="deleteById(scope.row.id)"></el-button>
+            <el-tooltip class="item" effect="dark" content="Assign Role" placement="top" :enterable="false">
+              <el-button type="warning" icon="el-icon-setting" size="mini" @click="showAssignRoleDialog(scope.row)"></el-button>
             </el-tooltip>
           </template>
         </el-table-column>
@@ -97,18 +56,8 @@
       </el-pagination>
     </el-card>
     <!-- add a user dialog -->
-    <el-dialog
-      title="Add a User"
-      :visible.sync="addDialogVisible"
-      width="50%"
-      @close="addDialogClosed"
-    >
-      <el-form
-        ref="addFormRef"
-        :model="addForm"
-        :rules="addFormRules"
-        label-width="120px"
-      >
+    <el-dialog title="Add a User" :visible.sync="addDialogVisible" width="50%" @close="addDialogClosed">
+      <el-form ref="addFormRef" :model="addForm" :rules="addFormRules" label-width="120px">
         <!-- prop is for validation rule -->
         <el-form-item label="Username" prop="username">
           <el-input v-model="addForm.username"></el-input>
@@ -129,18 +78,8 @@
       </span>
     </el-dialog>
     <!-- edit a user dialog -->
-    <el-dialog
-      title="Edit a User's Info"
-      :visible.sync="editDialogVisible"
-      width="50%"
-      @close="editDialogClosed"
-    >
-      <el-form
-        ref="editFormRef"
-        :model="editForm"
-        :rules="addFormRules"
-        label-width="120px"
-      >
+    <el-dialog title="Edit a User's Info" :visible.sync="editDialogVisible" width="50%" @close="editDialogClosed">
+      <el-form ref="editFormRef" :model="editForm" :rules="addFormRules" label-width="120px">
         <el-form-item label="Username">
           <el-input v-model="editForm.username" disabled></el-input>
         </el-form-item>
@@ -153,29 +92,16 @@
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="editDialogVisible = false">Cancel</el-button>
-        <el-button type="primary" @click="updateUser(editForm.id)"
-          >Update</el-button
-        >
+        <el-button type="primary" @click="updateUser(editForm.id)">Update</el-button>
       </span>
     </el-dialog>
     <!-- Assign roles to a user dialog -->
-    <el-dialog
-      title="Assign Role to User"
-      :visible.sync="assignRoleDialogVisible"
-      width="50%"
-      @close="assignRoleDialogClosed"
-    >
+    <el-dialog title="Assign Role to User" :visible.sync="assignRoleDialogVisible" width="50%" @close="assignRoleDialogClosed">
       <div>
         <p>Current user: {{ userInfo.username }}</p>
         <p>Current roles: {{ userInfo.role_name }}</p>
         <el-select v-model="selectedRoleId" placeholder="Select">
-          <el-option
-            v-for="item in roleList"
-            :key="item.id"
-            :label="item.roleName"
-            :value="item.id"
-          >
-          </el-option>
+          <el-option v-for="item in roleList" :key="item.id" :label="item.roleName" :value="item.id"> </el-option>
         </el-select>
       </div>
       <span slot="footer" class="dialog-footer">
@@ -304,9 +230,7 @@ export default {
       this.getUserList()
     },
     async updateStatus(userInfo) {
-      const { data: res } = await this.$http.put(
-        `users/${userInfo.id}/state/${userInfo.mg_state}`
-      )
+      const { data: res } = await this.$http.put(`users/${userInfo.id}/state/${userInfo.mg_state}`)
       if (res.meta.status !== 200) {
         // if fail, we need to make sure the page stays the same
         userInfo.mg_state = !userInfo.mg_state
@@ -363,15 +287,11 @@ export default {
     },
     async deleteById(id) {
       // ask if you really want to delete this user
-      this.$confirm(
-        'This will permanently delete this user. Continue?',
-        'Warning',
-        {
-          confirmButtonText: 'OK',
-          cancelButtonText: 'Cancel',
-          type: 'warning'
-        }
-      )
+      this.$confirm('This will permanently delete this user. Continue?', 'Warning', {
+        confirmButtonText: 'OK',
+        cancelButtonText: 'Cancel',
+        type: 'warning'
+      })
         .then(async () => {
           const { data: res } = await this.$http.delete('users/' + id)
           if (res.meta.status !== 200) {
@@ -403,12 +323,9 @@ export default {
       if (!this.selectedRoleId) {
         return this.$message.error('Please select a role')
       }
-      const { data: res } = await this.$http.put(
-        `users/${this.userInfo.id}/role`,
-        {
-          rid: this.selectedRoleId
-        }
-      )
+      const { data: res } = await this.$http.put(`users/${this.userInfo.id}/role`, {
+        rid: this.selectedRoleId
+      })
       if (res.meta.status !== 200) {
         console.log(res.meta.msg)
         return this.$message.error('Update role failure')

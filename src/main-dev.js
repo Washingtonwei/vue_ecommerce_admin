@@ -22,10 +22,19 @@ import './assets/css/global.css'
 import './assets/fonts/iconfont.css'
 // import axios and do some basic configurations
 import axios from 'axios'
+// import nprogress bar
+import NProgress from 'nprogress'
+import 'nprogress/nprogress.css'
+
 axios.defaults.baseURL = 'http://localhost:8888/api/private/v1/'
 // set the interceptors of axios: add token to every http request before this request goes out
 axios.interceptors.request.use(config => {
+  NProgress.start() // start progress bar when AJAX request is initiated
   config.headers.Authorization = window.sessionStorage.getItem('token')
+  return config
+})
+axios.interceptors.response.use(config => {
+  NProgress.done() // hide progress bar when response is back
   return config
 })
 // mount axios to the property of Vue's prototype

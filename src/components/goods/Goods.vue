@@ -11,18 +11,8 @@
       <!-- search box and add a product button area -->
       <el-row :gutter="20">
         <el-col :span="8">
-          <el-input
-            placeholder="Search a product"
-            v-model="queryInfo.query"
-            clearable
-            @keyup.enter.native="getGoodsList()"
-            @clear="getGoodsList()"
-          >
-            <el-button
-              slot="append"
-              icon="el-icon-search"
-              @click="getGoodsList()"
-            ></el-button>
+          <el-input placeholder="Search a product" v-model="queryInfo.query" clearable @keyup.enter.native="getGoodsList()" @clear="getGoodsList()">
+            <el-button slot="append" icon="el-icon-search" @click="getGoodsList()"></el-button>
           </el-input>
         </el-col>
         <el-col :span="4">
@@ -32,12 +22,9 @@
       <!-- goods table area -->
       <el-table :data="goodsList" stripe style="width: 100%" border>
         <el-table-column type="index" label="#"> </el-table-column>
-        <el-table-column prop="goods_name" label="Product name">
-        </el-table-column>
-        <el-table-column prop="goods_price" label="Price" width="90px">
-        </el-table-column>
-        <el-table-column prop="goods_weight" label="Weight" width="90px">
-        </el-table-column>
+        <el-table-column prop="goods_name" label="Product name"> </el-table-column>
+        <el-table-column prop="goods_price" label="Price" width="90px"> </el-table-column>
+        <el-table-column prop="goods_weight" label="Weight" width="90px"> </el-table-column>
         <el-table-column prop="add_time" label="Created time" width="140px">
           <template v-slot="scope">
             {{ scope.row.add_time | dateFormat }}
@@ -45,18 +32,8 @@
         </el-table-column>
         <el-table-column label="Operations" width="130px">
           <template v-slot="scope">
-            <el-button
-              type="primary"
-              icon="el-icon-edit"
-              size="mini"
-              @click="showEditDialog(scope.row)"
-            ></el-button>
-            <el-button
-              type="danger"
-              icon="el-icon-delete"
-              size="mini"
-              @click="deleteById(scope.row.goods_id)"
-            ></el-button>
+            <el-button type="primary" icon="el-icon-edit" size="mini" @click="showEditDialog(scope.row)"></el-button>
+            <el-button type="danger" icon="el-icon-delete" size="mini" @click="deleteById(scope.row.goods_id)"></el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -74,18 +51,8 @@
     </el-card>
 
     <!-- edit a product dialog -->
-    <el-dialog
-      title="Edit a Product's Info"
-      :visible.sync="editDialogVisible"
-      width="50%"
-      @close="editDialogClosed"
-    >
-      <el-form
-        ref="editFormRef"
-        :model="editForm"
-        :rules="addFormRules"
-        label-width="120px"
-      >
+    <el-dialog title="Edit a Product's Info" :visible.sync="editDialogVisible" width="50%" @close="editDialogClosed">
+      <el-form ref="editFormRef" :model="editForm" :rules="addFormRules" label-width="120px">
         <el-form-item label="Product name" prop="goods_name">
           <el-input v-model="editForm.goods_name"></el-input>
         </el-form-item>
@@ -98,9 +65,7 @@
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="editDialogVisible = false">Cancel</el-button>
-        <el-button type="primary" @click="updateProduct(editForm.id)"
-          >Update</el-button
-        >
+        <el-button type="primary" @click="updateProduct(editForm.id)">Update</el-button>
       </span>
     </el-dialog>
   </div>
@@ -190,9 +155,7 @@ export default {
       this.$router.push('/goods/add')
     },
     async showEditDialog(productInfo) {
-      const { data: res } = await this.$http.get(
-        '/goods/' + productInfo.goods_id
-      )
+      const { data: res } = await this.$http.get('/goods/' + productInfo.goods_id)
       if (res.meta.status !== 200) this.$message.error('Find a product Error')
       // populate the edit form
       this.editForm = res.data
@@ -218,15 +181,11 @@ export default {
     },
     async deleteById(id) {
       // ask if you really want to delete this product
-      this.$confirm(
-        'This will permanently delete this product. Continue?',
-        'Warning',
-        {
-          confirmButtonText: 'OK',
-          cancelButtonText: 'Cancel',
-          type: 'warning'
-        }
-      )
+      this.$confirm('This will permanently delete this product. Continue?', 'Warning', {
+        confirmButtonText: 'OK',
+        cancelButtonText: 'Cancel',
+        type: 'warning'
+      })
         .then(async () => {
           const { data: res } = await this.$http.delete('/goods/' + id)
           if (res.meta.status !== 200) {

@@ -9,20 +9,9 @@
     <!-- main area: Alert message, Steps bar and tabs -->
     <el-card class="box-card">
       <!-- alert box -->
-      <el-alert
-        title="Please Complete Product Information"
-        type="info"
-        center
-        show-icon
-      >
-      </el-alert>
+      <el-alert title="Please Complete Product Information" type="info" center show-icon> </el-alert>
       <!-- Steps bar -->
-      <el-steps
-        :space="200"
-        :active="activeStep - 0"
-        finish-status="success"
-        align-center
-      >
+      <el-steps :space="200" :active="activeStep - 0" finish-status="success" align-center>
         <el-step title="Basic Information"></el-step>
         <el-step title="Dynamic Attributes"></el-step>
         <el-step title="Static Attributes"></el-step>
@@ -31,20 +20,9 @@
         <el-step title="Complete"></el-step>
       </el-steps>
       <!-- Tabs area, we use form to encapsulate the tabs -->
-      <el-form
-        ref="addFormRef"
-        :model="addForm"
-        :rules="addFormRules"
-        label-width="120px"
-      >
+      <el-form ref="addFormRef" :model="addForm" :rules="addFormRules" label-width="120px">
         <!-- Take a look at before-leave property -->
-        <el-tabs
-          v-model="activeStep"
-          :tab-position="'left'"
-          style="height: 500px;"
-          :before-leave="beforeTabLeave"
-          @tab-click="handleTabClick"
-        >
+        <el-tabs v-model="activeStep" :tab-position="'left'" style="height: 500px;" :before-leave="beforeTabLeave" @tab-click="handleTabClick">
           <!-- Basic information of this new product -->
           <el-tab-pane label="Basic Info" name="0">
             <!-- prop is for validation rule -->
@@ -61,55 +39,29 @@
               <el-input v-model="addForm.goods_number" type="number"></el-input>
             </el-form-item>
             <el-form-item label="Category" prop="goods_cat">
-              <el-cascader
-                v-model="addForm.goods_cat"
-                :options="categoryList"
-                :props="cascaderProps"
-                @change="handleCategoryChange"
-              ></el-cascader>
+              <el-cascader v-model="addForm.goods_cat" :options="categoryList" :props="cascaderProps" @change="handleCategoryChange"></el-cascader>
             </el-form-item>
           </el-tab-pane>
           <!-- Dynamic attributes of this new product -->
           <el-tab-pane label="Dynamic Attributes" name="1">
-            <el-form-item
-              :label="attribute.attr_name"
-              v-for="attribute in dynamicAttributes"
-              :key="attribute.attr_id"
-            >
+            <el-form-item :label="attribute.attr_name" v-for="attribute in dynamicAttributes" :key="attribute.attr_id">
               <!-- iterate all the attr_vals of this attribute -->
               <!-- since we have already preprocessed attr_vals, so now it is an array of strings -->
               <el-checkbox-group v-model="attribute.attr_vals">
-                <el-checkbox
-                  :label="val"
-                  v-for="(val, i) in attribute.attr_vals"
-                  :key="i"
-                  border
-                  :checked="false"
-                ></el-checkbox>
+                <el-checkbox :label="val" v-for="(val, i) in attribute.attr_vals" :key="i" border :checked="false"></el-checkbox>
               </el-checkbox-group>
             </el-form-item>
           </el-tab-pane>
           <!-- Static attribtues of this new product -->
           <el-tab-pane label="Static Attributes" name="2">
-            <el-form-item
-              :label="attribute.attr_name"
-              v-for="attribute in staticAttributes"
-              :key="attribute.attr_id"
-            >
+            <el-form-item :label="attribute.attr_name" v-for="attribute in staticAttributes" :key="attribute.attr_id">
               <el-input v-model="attribute.attr_vals"></el-input>
             </el-form-item>
           </el-tab-pane>
           <!-- Picture upload -->
           <el-tab-pane label="Picture" name="3">
             <!-- action: where to upload this picture, but we need to set headers, add auth token to this request -->
-            <el-upload
-              :action="uploadURL"
-              :headers="headerObj"
-              :on-preview="handlePreview"
-              :on-remove="handleRemove"
-              list-type="picture"
-              :on-success="handlePictureUploadSuccess"
-            >
+            <el-upload :action="uploadURL" :headers="headerObj" :on-preview="handlePreview" :on-remove="handleRemove" list-type="picture" :on-success="handlePictureUploadSuccess">
               <el-button size="small" type="primary">Click to upload</el-button>
               <div slot="tip" class="el-upload__tip">
                 jpg/png files with a size less than 500kb
@@ -117,11 +69,8 @@
             </el-upload>
           </el-tab-pane>
           <el-tab-pane label="Content" name="4">
-            <quill-editor v-model="addForm.goods_introduce" ref="myQuillEditor">
-            </quill-editor>
-            <el-button type="primary" class="btnAdd" @click="addProduct"
-              >Add New Product</el-button
-            >
+            <quill-editor v-model="addForm.goods_introduce" ref="myQuillEditor"> </quill-editor>
+            <el-button type="primary" class="btnAdd" @click="addProduct">Add New Product</el-button>
           </el-tab-pane>
         </el-tabs>
       </el-form>
@@ -257,12 +206,9 @@ export default {
     async getCategoryAttributes(selParam) {
       // the user has selected a level 3 category on basic info tab
       // let's find all the attributes of this category
-      const { data: res } = await this.$http.get(
-        `categories/${this.catId}/attributes`,
-        {
-          params: { sel: selParam }
-        }
-      )
+      const { data: res } = await this.$http.get(`categories/${this.catId}/attributes`, {
+        params: { sel: selParam }
+      })
       if (res.meta.status !== 200) {
         this.$message.error('Obtain attributes of a category failure')
       }

@@ -11,9 +11,7 @@
       <!-- add a role area -->
       <el-row :gutter="20">
         <el-col :span="4">
-          <el-button type="primary" @click="addDialogVisible = true"
-            >Add a Role</el-button
-          >
+          <el-button type="primary" @click="addDialogVisible = true">Add a Role</el-button>
         </el-col>
       </el-row>
       <!-- role list area -->
@@ -23,17 +21,10 @@
           <!-- scoped slot is used here -->
           <template v-slot="scope">
             <!-- iterate all the children of one role -->
-            <el-row
-              :class="['bdbottom', i1 === 0 ? 'bdtop' : '', 'vcenter']"
-              v-for="(item1, i1) in scope.row.children"
-              :key="item1.id"
-            >
+            <el-row :class="['bdbottom', i1 === 0 ? 'bdtop' : '', 'vcenter']" v-for="(item1, i1) in scope.row.children" :key="item1.id">
               <!-- Level 1 permission: item1 -->
               <el-col :span="8">
-                <el-tag
-                  closable
-                  @close="removePermissionById(scope.row, item1.id)"
-                >
+                <el-tag closable @close="removePermissionById(scope.row, item1.id)">
                   {{ item1.authName }}
                 </el-tag>
                 <i class="el-icon-caret-right"></i>
@@ -42,17 +33,9 @@
               <el-col :span="16">
                 <!-- Levet 2 permissions: item2 -->
                 <!-- iterate all the children of item1 -->
-                <el-row
-                  :class="[i2 === 0 ? '' : 'bdtop', 'vcenter']"
-                  v-for="(item2, i2) in item1.children"
-                  :key="item2.id"
-                >
+                <el-row :class="[i2 === 0 ? '' : 'bdtop', 'vcenter']" v-for="(item2, i2) in item1.children" :key="item2.id">
                   <el-col :span="6">
-                    <el-tag
-                      type="success"
-                      closable
-                      @close="removePermissionById(scope.row, item2.id)"
-                    >
+                    <el-tag type="success" closable @close="removePermissionById(scope.row, item2.id)">
                       {{ item2.authName }}
                     </el-tag>
                     <i class="el-icon-caret-right"></i>
@@ -60,13 +43,7 @@
                   <!-- Level 3 permissions: item3 -->
                   <!-- iterate all the children of item2 -->
                   <el-col :span="18">
-                    <el-tag
-                      type="warning"
-                      v-for="item3 in item2.children"
-                      :key="item3.id"
-                      closable
-                      @close="removePermissionById(scope.row, item3.id)"
-                    >
+                    <el-tag type="warning" v-for="item3 in item2.children" :key="item3.id" closable @close="removePermissionById(scope.row, item3.id)">
                       {{ item3.authName }}
                     </el-tag>
                   </el-col>
@@ -80,49 +57,18 @@
         <el-table-column prop="roleDesc" label="Description"> </el-table-column>
         <el-table-column label="Operations">
           <template v-slot="scope">
-            <el-button
-              type="primary"
-              icon="el-icon-edit"
-              size="mini"
-              @click="showEditDialog(scope.row)"
-            ></el-button>
-            <el-button
-              type="danger"
-              icon="el-icon-delete"
-              size="mini"
-              @click="deleteById(scope.row.id)"
-            ></el-button>
-            <el-tooltip
-              class="item"
-              effect="dark"
-              content="Assign Permissions"
-              placement="top"
-              :enterable="false"
-            >
-              <el-button
-                type="warning"
-                icon="el-icon-setting"
-                size="mini"
-                @click="showSetPermissionDialog(scope.row)"
-              ></el-button>
+            <el-button type="primary" icon="el-icon-edit" size="mini" @click="showEditDialog(scope.row)"></el-button>
+            <el-button type="danger" icon="el-icon-delete" size="mini" @click="deleteById(scope.row.id)"></el-button>
+            <el-tooltip class="item" effect="dark" content="Assign Permissions" placement="top" :enterable="false">
+              <el-button type="warning" icon="el-icon-setting" size="mini" @click="showSetPermissionDialog(scope.row)"></el-button>
             </el-tooltip>
           </template>
         </el-table-column>
       </el-table>
     </el-card>
     <!-- add a role dialog -->
-    <el-dialog
-      title="Add a Role"
-      :visible.sync="addDialogVisible"
-      width="50%"
-      @close="addDialogClosed"
-    >
-      <el-form
-        ref="addFormRef"
-        :model="addForm"
-        :rules="addFormRules"
-        label-width="120px"
-      >
+    <el-dialog title="Add a Role" :visible.sync="addDialogVisible" width="50%" @close="addDialogClosed">
+      <el-form ref="addFormRef" :model="addForm" :rules="addFormRules" label-width="120px">
         <el-form-item label="Role Name" prop="roleName">
           <el-input v-model="addForm.roleName"></el-input>
         </el-form-item>
@@ -136,18 +82,8 @@
       </span>
     </el-dialog>
     <!-- edit a role dialog -->
-    <el-dialog
-      title="Edit a Role's Info"
-      :visible.sync="editDialogVisible"
-      width="50%"
-      @close="editDialogClosed"
-    >
-      <el-form
-        ref="editFormRef"
-        :model="editForm"
-        :rules="addFormRules"
-        label-width="120px"
-      >
+    <el-dialog title="Edit a Role's Info" :visible.sync="editDialogVisible" width="50%" @close="editDialogClosed">
+      <el-form ref="editFormRef" :model="editForm" :rules="addFormRules" label-width="120px">
         <el-form-item label="Role Name">
           <el-input v-model="editForm.roleName"></el-input>
         </el-form-item>
@@ -161,30 +97,12 @@
       </span>
     </el-dialog>
     <!-- Assign permissions to a role dialog -->
-    <el-dialog
-      title="Assign Permissions"
-      :visible.sync="setPermissionsDialogVisible"
-      width="50%"
-      @close="setPermissionDialogClosed"
-    >
+    <el-dialog title="Assign Permissions" :visible.sync="setPermissionsDialogVisible" width="50%" @close="setPermissionDialogClosed">
       <!-- tree component to show all permissions and the permissions this role has currently -->
-      <el-tree
-        :data="permissionList"
-        :props="defaultProps"
-        show-checkbox
-        default-expand-all
-        node-key="id"
-        ref="tree"
-        :default-checked-keys="defaultCheckedKeys"
-      >
-      </el-tree>
+      <el-tree :data="permissionList" :props="defaultProps" show-checkbox default-expand-all node-key="id" ref="tree" :default-checked-keys="defaultCheckedKeys"> </el-tree>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="setPermissionsDialogVisible = false"
-          >Cancel</el-button
-        >
-        <el-button type="primary" @click="updatePermissionsOfRole()"
-          >Confirm</el-button
-        >
+        <el-button @click="setPermissionsDialogVisible = false">Cancel</el-button>
+        <el-button type="primary" @click="updatePermissionsOfRole()">Confirm</el-button>
       </span>
     </el-dialog>
   </div>
@@ -268,14 +186,11 @@ export default {
       this.$refs.editFormRef.validate(async valid => {
         if (!valid) return
         // use axios to update this role
-        const { data: res } = await this.$http.put(
-          'roles/' + this.editForm.roleId,
-          {
-            roleId: this.editForm.roleId,
-            roleName: this.editForm.roleName,
-            roleDesc: this.editForm.roleDesc
-          }
-        )
+        const { data: res } = await this.$http.put('roles/' + this.editForm.roleId, {
+          roleId: this.editForm.roleId,
+          roleName: this.editForm.roleName,
+          roleDesc: this.editForm.roleDesc
+        })
         if (res.meta.status !== 200) {
           console.log(res.meta.msg)
           return this.$message.error('Update a Role Error')
@@ -300,15 +215,11 @@ export default {
     // delete a role
     async deleteById(id) {
       // ask if you really want to delete this role
-      this.$confirm(
-        'This will permanently delete this role. Continue?',
-        'Warning',
-        {
-          confirmButtonText: 'OK',
-          cancelButtonText: 'Cancel',
-          type: 'warning'
-        }
-      )
+      this.$confirm('This will permanently delete this role. Continue?', 'Warning', {
+        confirmButtonText: 'OK',
+        cancelButtonText: 'Cancel',
+        type: 'warning'
+      })
         .then(async () => {
           const { data: res } = await this.$http.delete('roles/' + id)
           if (res.meta.status !== 200) {
@@ -328,19 +239,13 @@ export default {
     // remove a permission from a role
     async removePermissionById(roleInfo, rightId) {
       // ask if you really want to delete this role
-      this.$confirm(
-        'This will permanently delete this permission. Continue?',
-        'Warning',
-        {
-          confirmButtonText: 'OK',
-          cancelButtonText: 'Cancel',
-          type: 'warning'
-        }
-      )
+      this.$confirm('This will permanently delete this permission. Continue?', 'Warning', {
+        confirmButtonText: 'OK',
+        cancelButtonText: 'Cancel',
+        type: 'warning'
+      })
         .then(async () => {
-          const { data: res } = await this.$http.delete(
-            `roles/${roleInfo.id}/rights/${rightId}`
-          )
+          const { data: res } = await this.$http.delete(`roles/${roleInfo.id}/rights/${rightId}`)
           if (res.meta.status !== 200) {
             this.$message.error('Delete a Permission from role Error')
           }
@@ -385,17 +290,11 @@ export default {
       this.defaultCheckedKeys = []
     },
     async updatePermissionsOfRole() {
-      const keys = [
-        ...this.$refs.tree.getCheckedKeys(),
-        ...this.$refs.tree.getHalfCheckedKeys()
-      ]
+      const keys = [...this.$refs.tree.getCheckedKeys(), ...this.$refs.tree.getHalfCheckedKeys()]
       const idStr = keys.join(',')
-      const { data: res } = await this.$http.post(
-        `roles/${this.roleId}/rights`,
-        {
-          rids: idStr
-        }
-      )
+      const { data: res } = await this.$http.post(`roles/${this.roleId}/rights`, {
+        rids: idStr
+      })
       if (res.meta.status !== 200) {
         return this.$message.error('Update Permission Failure')
       }
