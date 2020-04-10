@@ -2,6 +2,8 @@
 
 ## Project setup
 
+We recommend using Vue ui to learn about this project.
+
 ```
 npm install
 ```
