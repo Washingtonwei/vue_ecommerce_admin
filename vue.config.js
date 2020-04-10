@@ -11,7 +11,7 @@ module.exports = {
       // to minimize the final bundle js file
       config.set('externals', {
         vue: 'Vue',
-        // 'vue-router': 'VueRouter',
+        'vue-router': 'VueRouter',
         axios: 'axios',
         lodash: '_',
         echarts: 'echarts',
